@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int moveMin = 2250;
     [SerializeField] private int maxRead = 4000;
     [SerializeField] private int centerGap = 200;
+    [SerializeField] private GameObject deathUI = null;
 
     private LevelManager levelManager = null;
 
@@ -35,7 +36,6 @@ public class PlayerController : MonoBehaviour
         // alternate controls (no arduino)
         if (!usingArduino) {
             float horizontalInput = Input.GetAxis("Horizontal");
-            Debug.Log(horizontalInput);
             if      (horizontalInput == 0)  targetPos = 1;
             else if (horizontalInput < 0)   targetPos = 0;
             else if (horizontalInput > 0)   targetPos = 2;
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
             targetPos = 1;
         }
 
-        // Debug.Log("leftDistAvg: " + leftDistAvg + " rightDistAvg: " + rightDistAvg + " diff: " + diff);
+        Debug.Log("leftDistAvg: " + leftDistAvg + " rightDistAvg: " + rightDistAvg + " diff: " + diff);
     }
 
     void MessageArrLeft(string msg)
@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
         // Debug.Log("MessageArrLeft: " + msg);   
         int num = int.Parse(msg);
         if (num > maxRead) { num = maxRead; }
+        if (num < 425) { levelManager.LoadLevel("MainScene"); }
 
         leftDist[leftIter] = num;
         leftIter = (byte)((leftIter + 1) % 4);
@@ -88,6 +89,7 @@ public class PlayerController : MonoBehaviour
         // Debug.Log("MessageArrRight: " + msg);
         int num = int.Parse(msg);
         if (num > maxRead) { num = maxRead; }
+        if (num < 425) { levelManager.LoadLevel("Menu"); }
 
         rightDist[rightIter] = num;
         rightIter = (byte)((rightIter + 1) % 4);
@@ -97,12 +99,8 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Obstacle") {
-            StartCoroutine(waitToDie(1));
+            Debug.Log("You frickin died you frickin nerd");
+            deathUI.active = true;
         }
-    }
-
-    private IEnumerator waitToDie(int time) {
-        yield return new WaitForSeconds(time);
-        levelManager.LoadLevel("MainScene");
     }
 }

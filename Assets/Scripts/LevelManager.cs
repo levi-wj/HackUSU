@@ -5,18 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void LoadLevel(string name)
     {
         SceneManager.LoadScene(name);
@@ -25,5 +13,17 @@ public class LevelManager : MonoBehaviour
     public void Quit() {
         Application.Quit();
         Debug.Log("Quit");
+    }
+
+    void MessageArrLeft(string msg)
+    {
+        int num = int.Parse(msg);
+        if (num < 500) { LoadLevel("MainScene"); }
+    }
+
+    void MessageArrRight(string msg)
+    {
+        int num = int.Parse(msg);
+        if (num < 500) { Quit(); }
     }
 }
