@@ -665,5 +665,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38ba51a100b0004b9b6f6e8b3cb9846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveMin: 450
-  maxRead: 4200
+  moveMin: 425
+  maxRead: 4500
+  centerGap: 450

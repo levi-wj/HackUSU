@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private int moveMin = 2250;
     [SerializeField] private int maxRead = 4000;
+    [SerializeField] private int centerGap = 200;
 
     private Vector3[] positions = {
         new Vector3(-2, 1, 0),
@@ -16,9 +17,9 @@ public class PlayerController : MonoBehaviour
     private byte targetPos = 1;
 
     private byte leftIter = 0;
-    private int[] leftDist = { 0, 0, 0, 0, 0 };
+    private int[] leftDist = { 0, 0, 0, 0 };
     private byte rightIter = 0;
-    private int[] rightDist = { 0, 0, 0, 0, 0 };
+    private int[] rightDist = { 0, 0, 0, 0 };
     private bool usingArduino = false;
 
     // Start is called before the first frame update
@@ -28,6 +29,15 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update() {
+        // alternate controls (no arduino)
+        if (!usingArduino) {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            Debug.Log(horizontalInput);
+            if      (horizontalInput == 0)  targetPos = 1;
+            else if (horizontalInput < 0)   targetPos = 0;
+            else if (horizontalInput > 0)   targetPos = 2;
+        }
+
         transform.position = Vector3.MoveTowards(transform.position, positions[targetPos], 6 * Time.deltaTime);
     }
 
@@ -50,17 +60,11 @@ public class PlayerController : MonoBehaviour
         } else if (diff > moveMin) {
             targetPos = 2;
         }
+        if (leftDistAvg == maxRead - centerGap && rightDistAvg == maxRead - centerGap) {
+            targetPos = 1;
+        }
 
         Debug.Log("leftDistAvg: " + leftDistAvg + " rightDistAvg: " + rightDistAvg + " diff: " + diff);
-
-        // alternate controls (no arduino)
-        if (!usingArduino) {
-            float horizontalInput = Input.GetAxis("Horizontal");
-            Debug.Log(horizontalInput);
-            if      (horizontalInput == 0)  targetPos = 1;
-            else if (horizontalInput < 0)   targetPos = 0;
-            else if (horizontalInput > 0)   targetPos = 2;
-        }
     }
 
     void MessageArrLeft(string msg)
@@ -71,7 +75,7 @@ public class PlayerController : MonoBehaviour
         if (num > maxRead) { num = maxRead; }
 
         leftDist[leftIter] = num;
-        leftIter = (byte)((leftIter + 1) % 5);
+        leftIter = (byte)((leftIter + 1) % 4);
         updatePosition();
     }
 
@@ -83,7 +87,7 @@ public class PlayerController : MonoBehaviour
         if (num > maxRead) { num = maxRead; }
 
         rightDist[rightIter] = num;
-        rightIter = (byte)((rightIter + 1) % 5);
+        rightIter = (byte)((rightIter + 1) % 4);
         updatePosition();
     }
 }
