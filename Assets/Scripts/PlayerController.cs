@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int maxRead = 4000;
     [SerializeField] private int centerGap = 200;
 
+    private LevelManager levelManager = null;
+
     private Vector3[] positions = {
         new Vector3(-2, 1, 0),
         new Vector3(0, 1, 0),
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         transform.position = positions[targetPos];
     }
 
@@ -64,7 +67,7 @@ public class PlayerController : MonoBehaviour
             targetPos = 1;
         }
 
-        Debug.Log("leftDistAvg: " + leftDistAvg + " rightDistAvg: " + rightDistAvg + " diff: " + diff);
+        // Debug.Log("leftDistAvg: " + leftDistAvg + " rightDistAvg: " + rightDistAvg + " diff: " + diff);
     }
 
     void MessageArrLeft(string msg)
@@ -89,5 +92,17 @@ public class PlayerController : MonoBehaviour
         rightDist[rightIter] = num;
         rightIter = (byte)((rightIter + 1) % 4);
         updatePosition();
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Obstacle") {
+            StartCoroutine(waitToDie(1));
+        }
+    }
+
+    private IEnumerator waitToDie(int time) {
+        yield return new WaitForSeconds(time);
+        levelManager.LoadLevel("MainScene");
     }
 }
