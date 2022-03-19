@@ -19,10 +19,10 @@ public class Wrap : MonoBehaviour
         Vector3 newPosition = new Vector3(
             transform.position.x,
             transform.position.y,
-            scale * (1.5f - .1f)
+            scale * .1f
         );
 
-        if (transform.position.z < -100f) {
+        if (transform.position.z < -scale * .1f) {
             Debug.Log("Wrapping object");
             transform.position = newPosition;
         }
