@@ -25,6 +25,7 @@ using System.Threading;
  */
 public class SerialController : MonoBehaviour
 {
+    public string side = "Left";
     [Tooltip("Port name with which the SerialPort object will be created.")]
     public string portName = "COM3";
 
@@ -119,11 +120,11 @@ public class SerialController : MonoBehaviour
 
         // Check if the message is plain data or a connect/disconnect event.
         if (ReferenceEquals(message, SERIAL_DEVICE_CONNECTED))
-            messageListener.SendMessage("OnConnectionEvent", true);
+            Debug.Log("Connection established");
         else if (ReferenceEquals(message, SERIAL_DEVICE_DISCONNECTED))
-            messageListener.SendMessage("OnConnectionEvent", false);
+            Debug.Log("Connection attempt failed or disconnection detected");
         else
-            messageListener.SendMessage("OnMessageArrived", message);
+            messageListener.SendMessage("MessageArr" + side, message);
     }
 
     // ------------------------------------------------------------------------
@@ -134,15 +135,6 @@ public class SerialController : MonoBehaviour
     {
         // Read the next message from the queue
         return (string)serialThread.ReadMessage();
-    }
-
-    // ------------------------------------------------------------------------
-    // Puts a message in the outgoing queue. The thread object will send the
-    // message to the serial device when it considers it's appropriate.
-    // ------------------------------------------------------------------------
-    public void SendSerialMessage(string message)
-    {
-        serialThread.SendMessage(message);
     }
 
     // ------------------------------------------------------------------------
