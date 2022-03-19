@@ -52,12 +52,12 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("leftDistAvg: " + leftDistAvg + " rightDistAvg: " + rightDistAvg + " diff: " + diff);
 
-        // alternate controls (no arduino)
-        float horizontalInput = Input.GetAxis("Horizontal");
-        Debug.Log(horizontalInput);
-        if      (horizontalInput == 0)  targetPos = 1;
-        else if (horizontalInput < 0)   targetPos = 0;
-        else if (horizontalInput > 0)   targetPos = 2;
+        // // alternate controls (no arduino)
+        // float horizontalInput = Input.GetAxis("Horizontal");
+        // Debug.Log(horizontalInput);
+        // if      (horizontalInput == 0)  targetPos = 1;
+        // else if (horizontalInput < 0)   targetPos = 0;
+        // else if (horizontalInput > 0)   targetPos = 2;
     }
 
     void MessageArrLeft(string msg)
