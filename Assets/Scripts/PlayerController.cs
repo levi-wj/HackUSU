@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject deathUI = null;
 
     private LevelManager levelManager = null;
+    private ScoreManager scoreManager = null;
 
     private Vector3[] positions = {
         new Vector3(-2, 1, 0),
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         transform.position = positions[targetPos];
     }
@@ -101,6 +103,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle") {
             Debug.Log("You frickin died you frickin nerd");
             deathUI.active = true;
+            scoreManager.StopGame();
         }
     }
 }

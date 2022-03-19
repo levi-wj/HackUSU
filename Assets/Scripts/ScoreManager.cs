@@ -9,6 +9,7 @@ public class ScoreManager : MonoBehaviour
     public int score = 0;
     private Text text = null;
     private float timer = 0;
+    private bool gameGoing = true;
 
     // Start is called before the first frame update
     void Start()
@@ -19,18 +20,25 @@ public class ScoreManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        timer += Time.deltaTime;
-        if (timer >= .2f) {
-            moveSpeed += .2f;
-            timer = 0f;
-            ChangeScore(1);
-        }
+        if (gameGoing) {
+            timer += Time.deltaTime;
+            if (timer >= .2f) {
+                moveSpeed += .2f;
+                timer = 0f;
+                ChangeScore(1);
+            }
 
-        text.text = "Score: " + score.ToString();
+            text.text = "Score: " + score.ToString();
+        }
     }
 
     public void ChangeScore(int amount)
     {
         score += amount;
+    }
+
+    public void StopGame() 
+    {
+        gameGoing = false;
     }
 }
