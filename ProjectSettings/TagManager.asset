@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - sideScrolling
+  - Obstacle
   layers:
   - Default
   - TransparentFX
