@@ -25,13 +25,4 @@ public class Encounter : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collision");
-        if (collision.gameObject.tag == "Obstacle")
-        {
-            Debug.Log("Collision");
-        }
-    }
 }

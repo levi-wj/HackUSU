@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int moveMin = 2250;
     [SerializeField] private int maxRead = 4000;
     [SerializeField] private int centerGap = 200;
+    [SerializeField] private GameObject deathUI = null;
+
+    private LevelManager levelManager = null;
+    private ScoreManager scoreManager = null;
 
     private Vector3[] positions = {
         new Vector3(-2, 1, 0),
@@ -25,6 +29,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+        levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         transform.position = positions[targetPos];
     }
 
@@ -32,7 +38,6 @@ public class PlayerController : MonoBehaviour
         // alternate controls (no arduino)
         if (!usingArduino) {
             float horizontalInput = Input.GetAxis("Horizontal");
-            Debug.Log(horizontalInput);
             if      (horizontalInput == 0)  targetPos = 1;
             else if (horizontalInput < 0)   targetPos = 0;
             else if (horizontalInput > 0)   targetPos = 2;
@@ -73,6 +78,7 @@ public class PlayerController : MonoBehaviour
         // Debug.Log("MessageArrLeft: " + msg);   
         int num = int.Parse(msg);
         if (num > maxRead) { num = maxRead; }
+        if (num < 425) { levelManager.LoadLevel("MainScene"); }
 
         leftDist[leftIter] = num;
         leftIter = (byte)((leftIter + 1) % 4);
@@ -85,9 +91,19 @@ public class PlayerController : MonoBehaviour
         // Debug.Log("MessageArrRight: " + msg);
         int num = int.Parse(msg);
         if (num > maxRead) { num = maxRead; }
+        if (num < 425) { levelManager.LoadLevel("Menu"); }
 
         rightDist[rightIter] = num;
         rightIter = (byte)((rightIter + 1) % 4);
         updatePosition();
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Obstacle") {
+            Debug.Log("You frickin died you frickin nerd");
+            deathUI.active = true;
+            scoreManager.StopGame();
+        }
     }
 }
