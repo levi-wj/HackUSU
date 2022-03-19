@@ -427,7 +427,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609947a21c47bac4e90e57dcf583ef84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ground: {fileID: 0}
 --- !u!1001 &957947546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -694,4 +693,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38ba51a100b0004b9b6f6e8b3cb9846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  senseDist: 1750
+  moveMin: 450
+  maxRead: 4800
