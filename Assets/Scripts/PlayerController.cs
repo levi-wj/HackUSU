@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private int[] leftDist = { 0, 0, 0, 0, 0 };
     private byte rightIter = 0;
     private int[] rightDist = { 0, 0, 0, 0, 0 };
+    private bool usingArduino = false;
 
     // Start is called before the first frame update
     void Start()
@@ -52,16 +53,19 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("leftDistAvg: " + leftDistAvg + " rightDistAvg: " + rightDistAvg + " diff: " + diff);
 
-        // // alternate controls (no arduino)
-        // float horizontalInput = Input.GetAxis("Horizontal");
-        // Debug.Log(horizontalInput);
-        // if      (horizontalInput == 0)  targetPos = 1;
-        // else if (horizontalInput < 0)   targetPos = 0;
-        // else if (horizontalInput > 0)   targetPos = 2;
+        // alternate controls (no arduino)
+        if (!usingArduino) {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            Debug.Log(horizontalInput);
+            if      (horizontalInput == 0)  targetPos = 1;
+            else if (horizontalInput < 0)   targetPos = 0;
+            else if (horizontalInput > 0)   targetPos = 2;
+        }
     }
 
     void MessageArrLeft(string msg)
     {
+        usingArduino = true;
         // Debug.Log("MessageArrLeft: " + msg);   
         int num = int.Parse(msg);
         if (num > maxRead) { num = maxRead; }
@@ -73,6 +77,7 @@ public class PlayerController : MonoBehaviour
 
     void MessageArrRight(string msg)
     {
+        usingArduino = true;
         // Debug.Log("MessageArrRight: " + msg);
         int num = int.Parse(msg);
         if (num > maxRead) { num = maxRead; }

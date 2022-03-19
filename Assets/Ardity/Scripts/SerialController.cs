@@ -44,11 +44,6 @@ public class SerialController : MonoBehaviour
              "New messages will be discarded.")]
     public int maxUnreadMessages = 1;
 
-    // Constants used to mark the start and end of a connection. There is no
-    // way you can generate clashing messages from your serial device, as I
-    // compare the references of these strings, no their contents. So if you
-    // send these same strings from the serial device, upon reconstruction they
-    // will have different reference ids.
     public const string SERIAL_DEVICE_CONNECTED = "__Connected__";
     public const string SERIAL_DEVICE_DISCONNECTED = "__Disconnected__";
 
@@ -57,11 +52,9 @@ public class SerialController : MonoBehaviour
     protected SerialThreadLines serialThread;
 
 
-    // ------------------------------------------------------------------------
     // Invoked whenever the SerialController gameobject is activated.
     // It creates a new thread that tries to connect to the serial device
     // and start reading from it.
-    // ------------------------------------------------------------------------
     void OnEnable()
     {
         serialThread = new SerialThreadLines(portName, 
@@ -72,10 +65,8 @@ public class SerialController : MonoBehaviour
         thread.Start();
     }
 
-    // ------------------------------------------------------------------------
     // Invoked whenever the SerialController gameobject is deactivated.
     // It stops and destroys the thread that was reading from the serial device.
-    // ------------------------------------------------------------------------
     void OnDisable()
     {
         // If there is a user-defined tear-down function, execute it before
@@ -101,11 +92,7 @@ public class SerialController : MonoBehaviour
     }
 
     // ------------------------------------------------------------------------
-    // Polls messages from the queue that the SerialThread object keeps. Once a
-    // message has been polled it is removed from the queue. There are some
-    // special messages that mark the start/end of the communication with the
-    // device.
-    // ------------------------------------------------------------------------
+    // Polls messages from the queue 
     void Update()
     {
         // If the user prefers to poll the messages instead of receiving them
@@ -126,21 +113,6 @@ public class SerialController : MonoBehaviour
         else
             messageListener.SendMessage("MessageArr" + side, message);
     }
-
-    // ------------------------------------------------------------------------
-    // Returns a new unread message from the serial device. You only need to
-    // call this if you don't provide a message listener.
-    // ------------------------------------------------------------------------
-    public string ReadSerialMessage()
-    {
-        // Read the next message from the queue
-        return (string)serialThread.ReadMessage();
-    }
-
-    // ------------------------------------------------------------------------
-    // Executes a user-defined function before Unity closes the COM port, so
-    // the user can send some tear-down message to the hardware reliably.
-    // ------------------------------------------------------------------------
     public delegate void TearDownFunction();
     private TearDownFunction userDefinedTearDownFunction;
     public void SetTearDownFunction(TearDownFunction userFunction)
