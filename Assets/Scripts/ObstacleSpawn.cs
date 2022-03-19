@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ObstacleSpawn : MonoBehaviour
 {
-    public GameObject[] encounters;
-    public int[] weights;
+    public Encounter[] encounters;
     public Transform parent;
 
     private List<int> weightedEncounters = new List<int>();
@@ -15,13 +14,11 @@ public class ObstacleSpawn : MonoBehaviour
     {
         for (int i = 0; i < encounters.Length; i++)
         {
-            for (int j = 0; j < weights[i]; j++)
+            for (int j = 0; j < encounters[i].weight; j++)
             {
                 weightedEncounters.Add(i);
             }
         }
-
-        Instantiate(encounters[0], transform.position, transform.rotation, parent);
     }
 
     public void spawnEncounter() {
